@@ -12,9 +12,6 @@ export const Route = createLazyFileRoute('/')({
 
 function Index() {
     const { t } = useTranslation();
-
-
-
     return (
         <div id="home" className="p-2">
             <About></About>

@@ -19,19 +19,19 @@ function Component() {
 
     return (
         <>
-            <div className="fixed top-0 left-0 w-full bg-gray-800 text-white shadow-md z-50 p-3 flex flex-row gap-4 items-center ">
-                <Link to="#" className=" font-semibold hover:underline [&.active]:font-bold" onClick={() => scrollToSection('home')}>
+            <div className="w-full bg-gray-800 text-white shadow-md z-50 p-3 flex flex-row gap-4 items-center ">
+                <Link to="/about" className=" font-semibold hover:underline [&.active]:font-bold" onClick={() => scrollToSection('home')}>
                     {t('About')}
                 </Link>
-                <Link to="#" className="font-semibold hover:underline [&.active]:font-bold" onClick={() => scrollToSection('top-movies')}>
+                <Link to="/movies" className="font-semibold hover:underline [&.active]:font-bold" onClick={() => scrollToSection('top-movies')}>
                     {t('Movies')}
 
                 </Link>
-                <Link to="#" className="font-semibold hover:underline [&.active]:font-bold" onClick={() => scrollToSection('top-series')}>
+                <Link to="/serials" className="font-semibold hover:underline [&.active]:font-bold" onClick={() => scrollToSection('top-series')}>
                     {t('Serials')}
 
                 </Link>
-                <Link to="#" className="font-semibold hover:underline [&.active]:font-bold" onClick={() => scrollToSection('top-cartoons')}>
+                <Link to="/cartoons" className="font-semibold hover:underline [&.active]:font-bold" onClick={() => scrollToSection('top-cartoons')}>
                     {t('Cartoons')}
 
                 </Link>
