@@ -1,11 +1,22 @@
 {
   "Home": "Home",
   "About": "About",
-  "Welcome": "Welcome Home!",
+  "Welcome": "Welcome",
   "About us": "About us",
   "Movies": "Movies",
   "Serials": "Serials",
   "Cartoons": "Cartoons",
   "english": "Eng",
-  "russian": "Rus"
+  "russian": "Rus",
+  "login": "Login",
+  "logout": "Logout",
+  "search": "Search",
+  "movies": "List of movies",
+  "serials": "List of serials",
+  "cartoons": "List of cartoons",
+  "top_movies": "Top Movies of 2024",
+  "enter_username": "Enter Username",
+  "enter_password": "Enter Password",
+  "error": "Invalid credentials. Please try again.",
+  "learn_more": "Learn more about the site"
 }

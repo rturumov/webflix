@@ -1,8 +1,6 @@
 import { createLazyFileRoute, Link } from "@tanstack/react-router";
-import { t } from "i18next";
 import { useTranslation } from "react-i18next";
-import { useEffect, useState } from "react";
-import Auth from "../auth/authModal.tsx";
+
 
 export const Route = createLazyFileRoute("/")({
   component: Index,
@@ -17,18 +15,6 @@ function Index() {
     }
   };
 
-  const [user, setUser] = useState(null); // Состояние для хранения данных пользователя
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(true); // Контролирует открытие модального окна
-
-  const handleLogin = (userData) => {
-    setUser(userData); // Сохраняем данные пользователя
-    setIsAuthModalOpen(false); // Закрываем модальное окно при успешной авторизации
-  };
-
-  const handleLogout = () => {
-    setUser(null); // Сбрасываем состояние авторизации
-    setIsAuthModalOpen(true); // Открываем модальное окно при выходе
-  };
   const topCartoons = [
     {
       title: "Головоломка 2",
@@ -151,7 +137,7 @@ function Index() {
             fontSize: "2rem",
             paddingBottom: "30px",
           }}
-          className="bg-gradient-to-r from-gray-800 to-gray-900 text-gray-300 p-8 rounded-lg shadow-lg mt-20 p-8"
+          className="bg-gradient-to-r from-gray-800 to-gray-900 text-gray-300 p-8 rounded-lg shadow-lg mt-20"
         >
           <h1 className="text-4xl font-extrabold text-center mb-6">О нас</h1>
           <p className="text-lg leading-relaxed mb-6">

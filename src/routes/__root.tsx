@@ -17,24 +17,21 @@ function Component() {
   const { t } = useTranslation();
   console.log(i18n.language);
   const [searchQuery, setSearchQuery] = useState("");
-  const navigate = useNavigate();
-  const location = useLocation();
 
-  const [user, setUser] = useState(null); // Состояние для хранения данных пользователя
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(true); // Контролирует открытие модального окна
+  const [user, setUser] = useState(null);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(true);
 
   const handleLogin = (userData) => {
-    setUser(userData); // Сохраняем данные пользователя
-    setIsAuthModalOpen(false); // Закрываем модальное окно при успешной авторизации
+    setUser(userData);
+    setIsAuthModalOpen(false);
   };
 
   const handleLogout = () => {
-    setUser(null); // Сбрасываем состояние авторизации
-    setIsAuthModalOpen(true); // Открываем модальное окно при выходе
+    setUser(null);
+    setIsAuthModalOpen(true);
   };
   const handleSearch = () => {
     console.log("Search query:", searchQuery);
-    // Здесь вы можете добавить логику для обработки поиска
   };
 
   const changeLanguage = (language) => {
