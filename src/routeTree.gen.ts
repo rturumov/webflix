@@ -80,54 +80,12 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
-export interface FileRoutesByFullPath {
-  '/': typeof IndexLazyRoute
-  '/cartoons': typeof CartoonsLazyRoute
-  '/movies': typeof MoviesLazyRoute
-  '/serials': typeof SerialsLazyRoute
-}
-
-export interface FileRoutesByTo {
-  '/': typeof IndexLazyRoute
-  '/cartoons': typeof CartoonsLazyRoute
-  '/movies': typeof MoviesLazyRoute
-  '/serials': typeof SerialsLazyRoute
-}
-
-export interface FileRoutesById {
-  __root__: typeof rootRoute
-  '/': typeof IndexLazyRoute
-  '/cartoons': typeof CartoonsLazyRoute
-  '/movies': typeof MoviesLazyRoute
-  '/serials': typeof SerialsLazyRoute
-}
-
-export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/cartoons' | '/movies' | '/serials'
-  fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/cartoons' | '/movies' | '/serials'
-  id: '__root__' | '/' | '/cartoons' | '/movies' | '/serials'
-  fileRoutesById: FileRoutesById
-}
-
-export interface RootRouteChildren {
-  IndexLazyRoute: typeof IndexLazyRoute
-  CartoonsLazyRoute: typeof CartoonsLazyRoute
-  MoviesLazyRoute: typeof MoviesLazyRoute
-  SerialsLazyRoute: typeof SerialsLazyRoute
-}
-
-const rootRouteChildren: RootRouteChildren = {
-  IndexLazyRoute: IndexLazyRoute,
-  CartoonsLazyRoute: CartoonsLazyRoute,
-  MoviesLazyRoute: MoviesLazyRoute,
-  SerialsLazyRoute: SerialsLazyRoute,
-}
-
-export const routeTree = rootRoute
-  ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+export const routeTree = rootRoute.addChildren({
+  IndexLazyRoute,
+  CartoonsLazyRoute,
+  MoviesLazyRoute,
+  SerialsLazyRoute,
+})
 
 /* prettier-ignore-end */
 

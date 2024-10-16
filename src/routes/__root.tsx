@@ -74,19 +74,7 @@ function Component() {
         </Link>
 
         <div className="ml-auto flex space-x-2">
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder={t("Поиск")}
-            className="border-2 border-white rounded-md p-1 text-black"
-          />
-          <button
-            className="border-2 border-white rounded-md p-1 flex items-center"
-            onClick={handleSearch}
-          >
-            <FontAwesomeIcon icon={faMagnifyingGlass} /> {/* Иконка поиска */}
-          </button>
+
           <div className="flex space-x-2">
             <button
               className="bg-gray-200 text-gray-800 border border-gray-300 rounded-md py-2 px-4 hover:bg-gray-300 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500"
