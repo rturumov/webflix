@@ -2,16 +2,14 @@ import { createLazyFileRoute } from "@tanstack/react-router";
 import { t } from "i18next";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 
 export const Route = createLazyFileRoute("/serials")({
   component: Serials,
 });
 
 function Serials() {
-  const { t } = useTranslation();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedSeries, setSelectedSeries] = useState(null);
-
   const series = [
     {
       id: 1,
@@ -139,9 +137,24 @@ function Serials() {
     },
   ];
 
+  const { t } = useTranslation();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredQuery, setFilteredQuery] = useState("");
+  const [selectedSeries, setSelectedSeries] = useState(null);
+
   const filteredSeries = series.filter((s) =>
-    s.title.toLowerCase().includes(searchQuery.toLowerCase()),
+    s.title.toLowerCase().includes(filteredQuery.toLowerCase())
   );
+
+  const handleSearch = () => {
+    setFilteredQuery(searchQuery);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
 
   const openModal = (series) => {
     setSelectedSeries(series);
@@ -158,35 +171,44 @@ function Serials() {
       </h2>
 
       <div className="mb-4 text-center pb-5">
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Поиск сериалов..."
-          className="border-2 border-gray-300 rounded-md p-2 mb-4 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          style={{ width: "400px" }}
-        />
+        <div className="flex justify-center items-center gap-2">
+          <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)} // Изменяем только состояние поля ввода
+              onKeyDown={handleKeyDown}
+              placeholder={t('Поиск сериалов...')}
+              className="border-2 border-gray-300 rounded-md p-2 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              style={{width: '400px'}}
+          />
+          <button
+              className="border-2 border-white rounded-md p-3 flex items-center bg-blue-500 text-white hover:bg-blue-600"
+              onClick={handleSearch} // Поиск срабатывает при нажатии на кнопку
+          >
+            <FontAwesomeIcon icon={faMagnifyingGlass}/> {/* Иконка поиска */}
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredSeries.map((series) => (
-          <div
-            key={series.id}
-            className="border rounded-md overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
-          >
-            <img
-              src={series.posterUrl}
-              alt={series.title}
-              className="w-full h-72 object-cover transition-transform duration-300 transform hover:scale-105"
-            />
-            <div className="p-4 bg-white">
-              <h3 className="text-lg font-bold text-gray-800">
-                {series.title}
-              </h3>
-              <p className="text-gray-600 mt-2">{series.description}</p>
-              <p className="font-bold mt-2 text-blue-600">
-                Рейтинг: {series.rating}
-              </p>
+            <div
+                key={series.id}
+                className="border rounded-md overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
+            >
+              <img
+                  src={series.posterUrl}
+                  alt={series.title}
+                  className="w-full h-72 object-cover transition-transform duration-300 transform hover:scale-105"
+              />
+              <div className="p-4 bg-white">
+                <h3 className="text-lg font-bold text-gray-800">
+                  {series.title}
+                </h3>
+                <p className="text-gray-600 mt-2">{series.description}</p>
+                <p className="font-bold mt-2 text-blue-600">
+                  Рейтинг: {series.rating}
+                </p>
               <button
                 className="mt-3 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-300"
                 onClick={() => openModal(series)}
