@@ -20,6 +20,12 @@ const Auth = ({ onLogin }) => {
     }
   };
 
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            handleLogin();
+        }
+    };
+
   return (
     <div className="flex flex-col">
       <h2 className="text-2xl font-bold mb-4 text-center">Авторизация</h2>
@@ -36,6 +42,7 @@ const Auth = ({ onLogin }) => {
         placeholder="Пароль"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
+        onKeyDown={handleKeyDown}
         className="border border-gray-300 p-4 mb-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 transition duration-200"
       />
 

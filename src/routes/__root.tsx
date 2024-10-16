@@ -6,16 +6,12 @@ import {
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { useTranslation } from "react-i18next";
 import i18n from "i18next";
-import {useEffect, useState} from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import {useState} from "react";
 import Auth from "../auth/authModal.tsx";
 
 function Component() {
   const { t } = useTranslation();
   console.log(i18n.language);
-  const [searchQuery, setSearchQuery] = useState("");
-
   const [user, setUser] = useState(() => {
     const storedUser = localStorage.getItem('user');
     return storedUser ? JSON.parse(storedUser) : null;
@@ -33,9 +29,6 @@ function Component() {
     localStorage.removeItem('user');
     setUser(null);
     setIsAuthModalOpen(true);
-  };
-  const handleSearch = () => {
-    console.log("Search query:", searchQuery);
   };
 
   const changeLanguage = (language) => {

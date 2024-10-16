@@ -1,7 +1,7 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { t } from "i18next";
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
+import {useMemo, useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 
@@ -141,10 +141,25 @@ function Serials() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredQuery, setFilteredQuery] = useState("");
   const [selectedSeries, setSelectedSeries] = useState(null);
+  const [sortOption, setSortOption] = useState("default");
+  const [showSortOptions, setShowSortOptions] = useState(false);
 
-  const filteredSeries = series.filter((s) =>
-    s.title.toLowerCase().includes(filteredQuery.toLowerCase())
-  );
+  const filteredSeries = useMemo(() => {
+    return series.filter((s) =>
+        s.title.toLowerCase().includes(filteredQuery.toLowerCase())
+    );
+  }, [series, filteredQuery]);
+
+  const sortedSeries = useMemo(() => {
+    return [...filteredSeries].sort((a, b) => {
+      if (sortOption === "title") {
+        return a.title.localeCompare(b.title);
+      } else if (sortOption === "rating") {
+        return b.rating - a.rating;
+      }
+      return 0;
+    });
+  }, [filteredSeries, sortOption]);
 
   const handleSearch = () => {
     setFilteredQuery(searchQuery);
@@ -187,11 +202,35 @@ function Serials() {
           >
             <FontAwesomeIcon icon={faMagnifyingGlass}/> {/* Иконка поиска */}
           </button>
+
+          <button
+              className="mt-1 text-black-600 font-bold ml-4"
+              onClick={() => setShowSortOptions(!showSortOptions)}
+          >
+            {t("Сортировать по:")}
+          </button>
         </div>
+
+        {showSortOptions && (
+            <div className="flex flex-col items-center mt-2 ml-96 pl-24">
+              <button
+                  className={`mt-1 text-blue-600 ${sortOption === 'title' ? 'font-bold' : ''}`}
+                  onClick={() => setSortOption('title')}
+              >
+                {t("Названию")}
+              </button>
+              <button
+                  className={`mt-1 text-blue-600 ${sortOption === 'rating' ? 'font-bold' : ''}`}
+                  onClick={() => setSortOption('rating')}
+              >
+                {t("Рейтингу")}
+              </button>
+            </div>
+        )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredSeries.map((series) => (
+        {sortedSeries.map((series) => (
             <div
                 key={series.id}
                 className="border rounded-md overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
