@@ -2,13 +2,11 @@ import {
   createRootRoute,
   Link,
   Outlet,
-  useLocation,
-  useNavigate,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { useTranslation } from "react-i18next";
 import i18n from "i18next";
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import Auth from "../auth/authModal.tsx";
@@ -18,15 +16,21 @@ function Component() {
   console.log(i18n.language);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const [user, setUser] = useState(null);
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(true);
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem('user');
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
+
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(!user);
 
   const handleLogin = (userData) => {
     setUser(userData);
+    localStorage.setItem('user', JSON.stringify(userData));
     setIsAuthModalOpen(false);
   };
 
   const handleLogout = () => {
+    localStorage.removeItem('user');
     setUser(null);
     setIsAuthModalOpen(true);
   };
@@ -43,28 +47,28 @@ function Component() {
       <div className="h-16 fixed top-0 left-0 w-full bg-gray-800 text-white shadow-md z-50 p-3 flex flex-row gap-4 items-center">
         <Link
           to="/"
-          className="text-white font-semibold hover:text-yellow-400 transition duration-300 ease-in-out"
+          className="text-white font-semibold hover:text-blue-400 transition duration-300 ease-in-out"
         >
           {t("About")}
         </Link>
 
         <Link
           to="/movies"
-          className="text-white font-semibold hover:text-yellow-400 transition duration-300 ease-in-out"
+          className="text-white font-semibold hover:text-blue-400 transition duration-300 ease-in-out"
         >
           {t("Movies")}
         </Link>
 
         <Link
           to="/serials"
-          className="text-white font-semibold hover:text-yellow-400 transition duration-300 ease-in-out"
+          className="text-white font-semibold hover:text-blue-400 transition duration-300 ease-in-out"
         >
           {t("Serials")}
         </Link>
 
         <Link
           to="/cartoons"
-          className="text-white font-semibold hover:text-yellow-400 transition duration-300 ease-in-out"
+          className="text-white font-semibold hover:text-blue-400 transition duration-300 ease-in-out"
         >
           {t("Cartoons")}
         </Link>

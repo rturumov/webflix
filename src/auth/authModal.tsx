@@ -13,41 +13,41 @@ const Auth = ({ onLogin }) => {
     );
 
     if (user) {
-      onLogin(user); // Передаем данные пользователя в родительский компонент
-      setError(""); // Сбрасываем ошибку
+      onLogin(user);
+      setError("");
     } else {
-      setError("Неверное имя пользователя или пароль"); // Сообщение об ошибке
+      setError("Неверное имя пользователя или пароль");
     }
   };
 
   return (
-      <div className="flex flex-col">
-          <h2 className="text-2xl font-bold mb-4 text-center">Авторизация</h2>
-          <input
-              type="text"
-              placeholder="Имя пользователя"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="border border-gray-300 p-4 mb-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 transition duration-200"
-          />
+    <div className="flex flex-col">
+      <h2 className="text-2xl font-bold mb-4 text-center">Авторизация</h2>
+      <input
+        type="text"
+        placeholder="Имя пользователя"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        className="border border-gray-300 p-4 mb-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 transition duration-200"
+      />
 
-          <input
-              type="password"
-              placeholder="Пароль"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="border border-gray-300 p-4 mb-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 transition duration-200"
-          />
+      <input
+        type="password"
+        placeholder="Пароль"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        className="border border-gray-300 p-4 mb-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 transition duration-200"
+      />
 
-          <button
-              onClick={handleLogin}
-              className="bg-blue-700 text-white py-4 px-6 rounded-lg font-semibold w-full hover:bg-blue-600 transition duration-200"
-          >
-              Войти
-          </button>
+      <button
+        onClick={handleLogin}
+        className="bg-blue-700 text-white py-4 px-6 rounded-lg font-semibold w-full hover:bg-blue-600 transition duration-200"
+      >
+        Войти
+      </button>
 
-          {error && <p className="text-red-600 mt-4 text-center">{error}</p>}
-      </div>
+      {error && <p className="text-red-600 mt-4 text-center">{error}</p>}
+    </div>
   );
 };
 
