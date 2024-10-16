@@ -9,15 +9,11 @@ import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { useTranslation } from "react-i18next";
 import i18n from "i18next";
 import { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import Auth from "../auth/authModal.tsx";
 
 function Component() {
   const { t } = useTranslation();
   console.log(i18n.language);
-  const [searchQuery, setSearchQuery] = useState("");
-
   const [user, setUser] = useState(null);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(true);
 
@@ -29,9 +25,6 @@ function Component() {
   const handleLogout = () => {
     setUser(null);
     setIsAuthModalOpen(true);
-  };
-  const handleSearch = () => {
-    console.log("Search query:", searchQuery);
   };
 
   const changeLanguage = (language) => {
@@ -70,19 +63,6 @@ function Component() {
         </Link>
 
         <div className="ml-auto flex space-x-2">
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder={t("Поиск")}
-            className="border-2 border-white rounded-md p-1 text-black"
-          />
-          <button
-            className="border-2 border-white rounded-md p-1 flex items-center"
-            onClick={handleSearch}
-          >
-            <FontAwesomeIcon icon={faMagnifyingGlass} /> {/* Иконка поиска */}
-          </button>
           <div className="flex space-x-2">
             <button
               className="bg-gray-200 text-gray-800 border border-gray-300 rounded-md py-2 px-4 hover:bg-gray-300 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500"

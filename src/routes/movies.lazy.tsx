@@ -2,14 +2,14 @@ import { createLazyFileRoute, Link } from "@tanstack/react-router";
 import { t } from "i18next";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 
 export const Route = createLazyFileRoute("/movies")({
   component: Movies,
 });
 
 function Movies() {
-  const { t } = useTranslation();
-
   const movies = [
     {
       id: 1,
@@ -121,12 +121,24 @@ function Movies() {
     },
   ];
 
+  const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("");
+  const [filteredQuery, setFilteredQuery] = useState("");
   const [selectedMovie, setSelectedMovie] = useState(null);
 
   const filteredMovies = movies.filter((movie) =>
-    movie.title.toLowerCase().includes(searchQuery.toLowerCase()),
+    movie.title.toLowerCase().includes(filteredQuery.toLowerCase())
   );
+
+  const handleSearch = () => {
+    setFilteredQuery(searchQuery);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
 
   const openModal = (movie) => {
     setSelectedMovie(movie);
@@ -143,35 +155,44 @@ function Movies() {
       </h2>
 
       <div className="mb-6 text-center pb-5">
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder={t("Поиск фильмов...")}
-          className="border-2 border-gray-300 rounded-md p-2 mb-4 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          style={{ width: "400px" }}
-        />
+        <div className="flex justify-center items-center gap-2">
+          <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)} // Изменяем только состояние поля ввода
+              onKeyDown={handleKeyDown}
+              placeholder={t('Поиск фильмов...')}
+              className="border-2 border-gray-300 rounded-md p-2 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              style={{width: '400px'}}
+          />
+          <button
+              className="border-2 border-white rounded-md p-3 flex items-center bg-blue-500 text-white hover:bg-blue-600"
+              onClick={handleSearch} // Поиск срабатывает при нажатии на кнопку
+          >
+            <FontAwesomeIcon icon={faMagnifyingGlass}/> {/* Иконка поиска */}
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredMovies.map((movie) => (
-          <div
-            key={movie.id}
-            className="border rounded-md overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
-          >
-            <img
-              src={movie.posterUrl}
-              alt={movie.title}
-              className="w-full h-72 object-cover transition-transform duration-300 transform hover:scale-105"
-            />
-            <div className="p-4 bg-white">
-              <h3 className="text-lg font-bold text-gray-800">{movie.title}</h3>
-              <p className="text-gray-600 mt-2">{movie.description}</p>
-              <p className="font-bold mt-2 text-blue-600">
-                Рейтинг: {movie.rating}
-              </p>
-              <button
-                className="mt-3 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-300"
+            <div
+                key={movie.id}
+                className="border rounded-md overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
+            >
+              <img
+                  src={movie.posterUrl}
+                  alt={movie.title}
+                  className="w-full h-72 object-cover transition-transform duration-300 transform hover:scale-105"
+              />
+              <div className="p-4 bg-white">
+                <h3 className="text-lg font-bold text-gray-800">{movie.title}</h3>
+                <p className="text-gray-600 mt-2">{movie.description}</p>
+                <p className="font-bold mt-2 text-blue-600">
+                  Рейтинг: {movie.rating}
+                </p>
+                <button
+                    className="mt-3 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-300"
                 onClick={() => openModal(movie)}
               >
                 {t("Подробнее")}
