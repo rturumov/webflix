@@ -1,0 +1,54 @@
+// Auth.js
+import React, { useState } from "react";
+import { mockUsers } from "./mockUsers"; // Импортируйте мок-данные
+
+const Auth = ({ onLogin }) => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const handleLogin = () => {
+    const user = mockUsers.find(
+      (user) => user.username === username && user.password === password,
+    );
+
+    if (user) {
+      onLogin(user); // Передаем данные пользователя в родительский компонент
+      setError(""); // Сбрасываем ошибку
+    } else {
+      setError("Неверное имя пользователя или пароль"); // Сообщение об ошибке
+    }
+  };
+
+  return (
+      <div className="flex flex-col">
+          <h2 className="text-2xl font-bold mb-4 text-center">Авторизация</h2>
+          <input
+              type="text"
+              placeholder="Имя пользователя"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="border border-gray-300 p-4 mb-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 transition duration-200"
+          />
+
+          <input
+              type="password"
+              placeholder="Пароль"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="border border-gray-300 p-4 mb-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 transition duration-200"
+          />
+
+          <button
+              onClick={handleLogin}
+              className="bg-blue-700 text-white py-4 px-6 rounded-lg font-semibold w-full hover:bg-blue-600 transition duration-200"
+          >
+              Войти
+          </button>
+
+          {error && <p className="text-red-600 mt-4 text-center">{error}</p>}
+      </div>
+  );
+};
+
+export default Auth;

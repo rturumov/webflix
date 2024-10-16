@@ -1,72 +1,137 @@
-import {createRootRoute, Link, Outlet, useLocation, useNavigate} from '@tanstack/react-router';
-import { TanStackRouterDevtools } from '@tanstack/router-devtools';
+import {
+  createRootRoute,
+  Link,
+  Outlet,
+  useLocation,
+  useNavigate,
+} from "@tanstack/react-router";
+import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { useTranslation } from "react-i18next";
 import i18n from "i18next";
-import { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import Auth from "../auth/authModal.tsx";
 
 function Component() {
-    const { t } = useTranslation();
-    console.log(i18n.language);
-    const [searchQuery, setSearchQuery] = useState("");
-    const navigate = useNavigate();
-    const location = useLocation();
+  const { t } = useTranslation();
+  console.log(i18n.language);
+  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
+  const location = useLocation();
 
-    const handleSearch = () => {
-        console.log("Search query:", searchQuery);
-        // Здесь вы можете добавить логику для обработки поиска
-    };
+  const [user, setUser] = useState(null); // Состояние для хранения данных пользователя
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(true); // Контролирует открытие модального окна
 
-    const changeLanguage = (language) => {
-        i18n.changeLanguage(language);
-    };
+  const handleLogin = (userData) => {
+    setUser(userData); // Сохраняем данные пользователя
+    setIsAuthModalOpen(false); // Закрываем модальное окно при успешной авторизации
+  };
 
-    return (
-        <>
-            <div className="fixed top-0 left-0 w-full bg-gray-800 text-white shadow-md z-50 p-3 flex flex-row gap-4 items-center">
-                <Link to="/" className={`font-semibold hover:underline ${location.pathname === '/about' ? 'font-bold' : ''}`}>
-                    {t('About')}
-                </Link>
-                <Link to="/movies" className={`font-semibold hover:underline ${location.pathname === '/movies' ? 'font-bold' : ''}`}>
-                    {t('Movies')}
-                </Link>
-                <Link to="/serials" className={`font-semibold hover:underline ${location.pathname === '/serials' ? 'font-bold' : ''}`}>
-                    {t('Serials')}
-                </Link>
-                <Link to="/cartoons" className={`font-semibold hover:underline ${location.pathname === '/cartoons' ? 'font-bold' : ''}`}>
-                    {t('Cartoons')}
-                </Link>
-                <div className="ml-auto flex space-x-2">
-                    <input
-                        type="text"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder={t('Search')}
-                        className="border-2 border-white rounded-md p-1 text-black"
-                    />
-                    <button
-                        className="border-2 border-white rounded-md p-1 flex items-center"
-                        onClick={handleSearch}
-                    >
-                        <FontAwesomeIcon icon={faMagnifyingGlass} /> {/* Иконка поиска */}
-                    </button>
-                    <button className="border-2 border-white rounded-md p-1" onClick={() => changeLanguage("en")}>
-                        {t('english')}
-                    </button>
-                    <button className="border-2 border-white rounded-md p-1" onClick={() => changeLanguage("ru")}>
-                        {t('russian')}
-                    </button>
-                </div>
+  const handleLogout = () => {
+    setUser(null); // Сбрасываем состояние авторизации
+    setIsAuthModalOpen(true); // Открываем модальное окно при выходе
+  };
+  const handleSearch = () => {
+    console.log("Search query:", searchQuery);
+    // Здесь вы можете добавить логику для обработки поиска
+  };
+
+  const changeLanguage = (language) => {
+    i18n.changeLanguage(language);
+  };
+
+  return (
+    <>
+      <div className="h-16 fixed top-0 left-0 w-full bg-gray-800 text-white shadow-md z-50 p-3 flex flex-row gap-4 items-center">
+        <Link
+          to="/"
+          className="text-white font-semibold hover:text-yellow-400 transition duration-300 ease-in-out"
+        >
+          {t("About")}
+        </Link>
+
+        <Link
+          to="/movies"
+          className="text-white font-semibold hover:text-yellow-400 transition duration-300 ease-in-out"
+        >
+          {t("Movies")}
+        </Link>
+
+        <Link
+          to="/serials"
+          className="text-white font-semibold hover:text-yellow-400 transition duration-300 ease-in-out"
+        >
+          {t("Serials")}
+        </Link>
+
+        <Link
+          to="/cartoons"
+          className="text-white font-semibold hover:text-yellow-400 transition duration-300 ease-in-out"
+        >
+          {t("Cartoons")}
+        </Link>
+
+        <div className="ml-auto flex space-x-2">
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder={t("Поиск")}
+            className="border-2 border-white rounded-md p-1 text-black"
+          />
+          <button
+            className="border-2 border-white rounded-md p-1 flex items-center"
+            onClick={handleSearch}
+          >
+            <FontAwesomeIcon icon={faMagnifyingGlass} /> {/* Иконка поиска */}
+          </button>
+          <div className="flex space-x-2">
+            <button
+              className="bg-gray-200 text-gray-800 border border-gray-300 rounded-md py-2 px-4 hover:bg-gray-300 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500"
+              onClick={() => changeLanguage("en")}
+            >
+              {t("english")}
+            </button>
+            <button
+              className="bg-gray-200 text-gray-800 border border-gray-300 rounded-md py-2 px-4 hover:bg-gray-300 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500"
+              onClick={() => changeLanguage("ru")}
+            >
+              {t("russian")}
+            </button>
+          </div>
+        </div>
+        <div className="min-h-screen flex flex-row items-center justify-center h-0.5">
+          {user ? (
+            <>
+              <h1 className="text-1xl font-bold">
+                Добро пожаловать, {user.name}!
+              </h1>
+              <button
+                onClick={handleLogout}
+                className="ml-5 bg-red-500 text-white py-2 px-4 rounded"
+              >
+                Выйти
+              </button>
+            </>
+          ) : null}
+          {isAuthModalOpen && (
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+              <div className="bg-white text-black p-6 rounded-md shadow-lg w-80">
+                <Auth onLogin={handleLogin} />
+              </div>
             </div>
+          )}
+        </div>
+      </div>
 
-            <hr />
-            <Outlet  />
-            <TanStackRouterDevtools />
-        </>
-    );
+      <hr />
+      <Outlet />
+      <TanStackRouterDevtools />
+    </>
+  );
 }
 
 export const Route = createRootRoute({
-    component: Component,
+  component: Component,
 });
