@@ -145,6 +145,10 @@ function Movies() {
     });
   }, [filteredMovies, sortOption]);
 
+  useEffect(() => {
+    console.log("Сортировка изменена:", sortOption);
+  }, [sortOption]);
+
   const handleSearch = () => {
     setFilteredQuery(searchQuery);
   };

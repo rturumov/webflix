@@ -1,7 +1,7 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { t } from "i18next";
 import { useTranslation } from "react-i18next";
-import {useMemo, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 
@@ -160,6 +160,10 @@ function Serials() {
       return 0;
     });
   }, [filteredSeries, sortOption]);
+
+  useEffect(() => {
+    console.log("Сортировка изменена:", sortOption);
+  }, [sortOption]);
 
   const handleSearch = () => {
     setFilteredQuery(searchQuery);

@@ -1,7 +1,7 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { t } from "i18next";
 import { useTranslation } from "react-i18next";
-import { useState, useMemo} from "react";
+import { useEffect, useState, useMemo} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 
@@ -157,7 +157,6 @@ function Cartoons() {
     );
   }, [cartoons, filteredQuery]);
 
-  // Сортировка мультфильмов
   const sortedCartoons = useMemo(() => {
     return [...filteredCartoons].sort((a, b) => {
       if (sortOption === "title") {
@@ -168,6 +167,10 @@ function Cartoons() {
       return 0;
     });
   }, [filteredCartoons, sortOption]);
+
+  useEffect(() => {
+    console.log("Сортировка изменена:", sortOption);
+  }, [sortOption]);
 
   const handleSearch = () => {
     setFilteredQuery(searchQuery);

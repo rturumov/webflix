@@ -1,5 +1,5 @@
 // Auth.js
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { mockUsers } from "./mockUsers"; // Импортируйте мок-данные
 
 const Auth = ({ onLogin }) => {
@@ -19,6 +19,10 @@ const Auth = ({ onLogin }) => {
       setError("Неверное имя пользователя или пароль");
     }
   };
+
+    useEffect(() => {
+        console.log("Успешная авторизация.", handleLogin);
+    }, [handleLogin]);
 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
