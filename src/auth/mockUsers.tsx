@@ -9,4 +9,9 @@ export const mockUsers = [
     password: "123",
     name: "Расул",
   },
+  {
+    username: "ayana",
+    password: "123",
+    name: "Аяна",
+  },
 ];

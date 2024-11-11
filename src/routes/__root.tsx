@@ -1,19 +1,15 @@
-import {
-  createRootRoute,
-  Link,
-  Outlet,
-} from "@tanstack/react-router";
+import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { useTranslation } from "react-i18next";
 import i18n from "i18next";
-import {useState} from "react";
+import { useState } from "react";
 import Auth from "../auth/authModal.tsx";
 
 function Component() {
   const { t } = useTranslation();
   console.log(i18n.language);
   const [user, setUser] = useState(() => {
-    const storedUser = localStorage.getItem('user');
+    const storedUser = localStorage.getItem("user");
     return storedUser ? JSON.parse(storedUser) : null;
   });
 
@@ -21,12 +17,12 @@ function Component() {
 
   const handleLogin = (userData) => {
     setUser(userData);
-    localStorage.setItem('user', JSON.stringify(userData));
+    localStorage.setItem("user", JSON.stringify(userData));
     setIsAuthModalOpen(false);
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('user');
+    localStorage.removeItem("user");
     setUser(null);
     setIsAuthModalOpen(true);
   };
@@ -67,7 +63,6 @@ function Component() {
         </Link>
 
         <div className="ml-auto flex space-x-2">
-
           <div className="flex space-x-2">
             <button
               className="bg-gray-200 text-gray-800 border border-gray-300 rounded-md py-2 px-4 hover:bg-gray-300 transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500"

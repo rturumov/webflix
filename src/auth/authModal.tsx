@@ -1,5 +1,5 @@
 // Auth.js
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { mockUsers } from "./mockUsers"; // Импортируйте мок-данные
 
 const Auth = ({ onLogin }) => {
@@ -20,15 +20,15 @@ const Auth = ({ onLogin }) => {
     }
   };
 
-    useEffect(() => {
-        console.log("Успешная авторизация.", handleLogin);
-    }, [handleLogin]);
+  useEffect(() => {
+    console.log("Успешная авторизация.", handleLogin);
+  }, [handleLogin]);
 
-    const handleKeyDown = (e) => {
-        if (e.key === 'Enter') {
-            handleLogin();
-        }
-    };
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleLogin();
+    }
+  };
 
   return (
     <div className="flex flex-col">
