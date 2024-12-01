@@ -5,6 +5,10 @@ import i18n from "i18next";
 import { useState } from "react";
 import Auth from "../auth/authModal.tsx";
 
+export const Route = createRootRoute({
+  component: Component,
+})
+
 function Component() {
   const { t } = useTranslation();
   console.log(i18n.language);
@@ -78,7 +82,7 @@ function Component() {
             </button>
           </div>
         </div>
-        <div className="min-h-screen flex flex-row items-center justify-center h-0.5">
+        <div className="flex flex-row items-center justify-center">
           {user ? (
             <>
               <h1 className="text-1xl font-bold">
@@ -108,7 +112,3 @@ function Component() {
     </>
   );
 }
-
-export const Route = createRootRoute({
-  component: Component,
-});

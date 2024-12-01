@@ -5,6 +5,7 @@ import "./i18n.tsx";
 import "./index.css";
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
+import {NextUIProvider} from "@nextui-org/react";
 
 // Create a new router instance
 const router = createRouter({ routeTree });
@@ -20,7 +21,9 @@ if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <StrictMode>
+      <NextUIProvider>
       <RouterProvider router={router} />
+        </NextUIProvider>
     </StrictMode>,
   );
 }
