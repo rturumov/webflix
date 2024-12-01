@@ -1,22 +1,27 @@
-// Auth.js
 import React, { useEffect, useState } from "react";
-import { mockUsers } from "./mockUsers"; // Импортируйте мок-данные
 
 const Auth = ({ onLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleLogin = () => {
-    const user = mockUsers.find(
-      (user) => user.username === username && user.password === password,
-    );
+  const handleLogin = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/users');
+      const users = await response.json();
 
-    if (user) {
-      onLogin(user);
-      setError("");
-    } else {
-      setError("Неверное имя пользователя или пароль");
+      const user = users.find(
+        (user) => user.username === username && user.password === password
+      );
+
+      if (user) {
+        onLogin(user); 
+        setError(""); 
+      } else {
+        setError("Неверное имя пользователя или пароль");
+      }
+    } catch (error) {
+      setError("Произошла ошибка при подключении к серверу");
     }
   };
 
