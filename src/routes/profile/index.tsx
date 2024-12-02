@@ -9,13 +9,13 @@ export const Route = createFileRoute('/profile/')({
 })
 
 function Profile(){
-    const { favorites } = useFavorites();
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [profile, setProfile] = useState([]);
     const [editing, setEditing] = useState(false);
     const [newName, setNewName] = useState("");
     const [newEmail, setNewEmail] = useState("");
+    const { favorites, toggleFavorite, isFavorite} = useFavorites();
 
     const userId = localStorage.getItem('userId');
 
@@ -89,10 +89,9 @@ function Profile(){
                 border: "1px solid #ccc",
                 borderRadius: "8px"
             }}>
-                <h3>Профиль пользователя</h3>
-                <Avatar src="https://i.pravatar.cc/150?u=a04258114e29026302d" size="lg"/>
+                <h3 className="pb-1">Профиль пользователя:</h3>
+                <Avatar src="https://i.pravatar.cc/150?u=a04258114e29026302d" size="lg" />
                 <div>
-                    <h4>Имя:</h4>
                     {editing ? (
                         <input
                             type="text"
@@ -108,11 +107,10 @@ function Profile(){
                             }}
                         />
                     ) : (
-                        <p>{profile.name}</p>
+                        <p>Имя: {profile.name}</p>
                     )}
                 </div>
                 <div>
-                    <h4>Email:</h4>
                     {editing ? (
                         <input
                             type="email"
@@ -128,7 +126,7 @@ function Profile(){
                             }}
                         />
                     ) : (
-                        <p>{profile.email}</p>
+                        <>Email: {profile.email}</>
                     )}
                 </div>
 
@@ -153,7 +151,7 @@ function Profile(){
                     )}
                 </div>
                 <div>
-                    <h2 style={{padding: '20px'}}>Избранные фильмы</h2>
+                    <h2 style={{padding: '20px', textAlign:'center', fontSize:'30px'}}>Избранные фильмы</h2>
                     {favorites.filter(item => item.type === "movie").length === 0 ? (
                         <p>У вас нет избранных фильмов.</p>
                     ) : (
@@ -166,8 +164,21 @@ function Profile(){
                                         alt={movie.title}
                                         className="w-full h-72 object-cover"
                                     />
-                                    <div className="p-4 bg-white">
+                                    <div className="p-3 bg-white">
                                         <h3 className="text-lg font-bold">{movie.title}</h3>
+                                    </div>
+                                    <div className="flex items-center justify-center mb-4">
+                                        <button
+                                            style={{
+                                                padding: "8px 16px",
+                                                backgroundColor: isFavorite(movie.id) ? "red" : "green",
+                                                color: "white",
+                                                borderRadius: "4px",
+                                            }}
+                                            onClick={() => toggleFavorite(movie)}
+                                        >
+                                            Удалить
+                                        </button>
                                     </div>
                                 </div>
                             ))}
@@ -175,7 +186,7 @@ function Profile(){
                     )}
                 </div>
                 <div>
-                    <h2 style={{padding: '20px'}}>Избранные сериалы</h2>
+                    <h2 style={{padding: '20px', textAlign:'center', fontSize:'30px'}}>Избранные сериалы</h2>
                     {favorites.filter(item => item.type === "serial").length === 0 ? (
                         <p>У вас нет избранных сериалов.</p>
                     ) : (
@@ -188,8 +199,21 @@ function Profile(){
                                         alt={serial.title}
                                         className="w-full h-72 object-cover"
                                     />
-                                    <div className="p-4 bg-white">
+                                    <div className="p-3 bg-white">
                                         <h3 className="text-lg font-bold">{serial.title}</h3>
+                                    </div>
+                                    <div className="flex items-center justify-center mb-4">
+                                        <button
+                                            style={{
+                                                padding: "8px 16px",
+                                                backgroundColor: isFavorite(serial.id) ? "red" : "green",
+                                                color: "white",
+                                                borderRadius: "4px",
+                                            }}
+                                            onClick={() => toggleFavorite(serial)}
+                                        >
+                                            Удалить
+                                        </button>
                                     </div>
                                 </div>
                             ))}
@@ -197,7 +221,7 @@ function Profile(){
                     )}
                 </div>
                 <div>
-                    <h2 style={{padding: '20px'}}>Избранные мультфильмы</h2>
+                    <h2 style={{padding: '20px', textAlign:'center', fontSize:'30px'}}>Избранные мультфильмы</h2>
                     {favorites.filter(item => item.type === "cartoon").length === 0 ? (
                         <p>У вас нет избранных мультфильмов.</p>
                     ) : (
@@ -207,13 +231,26 @@ function Profile(){
                                 .map((cartoon) => (
                                     <div key={`cartoon-${cartoon.id}`}
                                          className="border rounded-md overflow-hidden shadow-lg">
-                                        <img
+                                    <img
                                             src={cartoon.posterUrl}
                                             alt={cartoon.title}
                                             className="w-full h-72 object-cover"
                                         />
-                                        <div className="p-4 bg-white">
+                                        <div className="p-3 bg-white">
                                             <h3 className="text-lg font-bold">{cartoon.title}</h3>
+                                        </div>
+                                        <div className="flex items-center justify-center mb-4">
+                                            <button
+                                                style={{
+                                                    padding: "8px 16px",
+                                                    backgroundColor: isFavorite(cartoon.id) ? "red" : "green",
+                                                    color: "white",
+                                                    borderRadius: "4px",
+                                                }}
+                                                onClick={() => toggleFavorite(cartoon)}
+                                            >
+                                                Удалить
+                                            </button>
                                         </div>
                                     </div>
                                 ))}
