@@ -5,13 +5,20 @@
       "username": "aldiyar",
       "password": "123",
       "name": "Алдияр",
-      "email": "aldiyar@mail.ru"
+      "email": "aaaaa@mail.ru"
     },
     {
       "id": "2",
       "username": "rassul",
       "password": "123",
       "name": "Расул",
+      "email": "aldiyar@mail.ru"
+    },
+    {
+      "id": "3",
+      "username": "aaa",
+      "password": "123",
+      "name": "aaa",
       "email": "aldiyar@mail.ru"
     }
   ],

@@ -17,31 +17,37 @@ function Profile(){
     const [newName, setNewName] = useState("");
     const [newEmail, setNewEmail] = useState("");
 
-    useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                const response = await fetch('http://localhost:5000/users');
-                if (!response.ok) {
-                    throw new Error('Ошибка загрузки данных');
-                }
-                const data = await response.json();
-                console.log('Загруженные данные:', data);
-                if (data && data.length > 0) {
-                    // Предположим, что получаем массив пользователей, берем первого
-                    const userProfile = data[0];
-                    setProfile(userProfile);
-                    setNewName(userProfile.name);  // Устанавливаем новое имя
-                    setNewEmail(userProfile.email);  // Устанавливаем новый email
-                }
-            } catch (error) {
-                setError(error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
+    const userId = localStorage.getItem('userId');
 
+    useEffect(() => {
+      const fetchUsers = async () => {
+        try {
+          // Используем userId для получения данных текущего пользователя
+          const response = await fetch(`http://localhost:5000/users/${userId}`);
+          if (!response.ok) {
+            throw new Error('Ошибка загрузки данных');
+          }
+          const data = await response.json();
+          console.log('Загруженные данные:', data);
+          setProfile(data);
+          setNewName(data.name);
+          setNewEmail(data.email);
+        } catch (error) {
+          setError(error);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+  
+      if (userId) {
         fetchUsers();
-    }, []);
+      } else {
+        // Обработка случая, когда пользователь не авторизован
+        setError('Пользователь не авторизован');
+        setIsLoading(false);
+      }
+    }, [userId]);
+
     // Функция для переключения режима редактирования
     const toggleEditMode = () => setEditing(!editing);
 
@@ -49,7 +55,7 @@ function Profile(){
     const handleSaveChanges = async () => {
         const updatedProfile = { ...profile, name: newName, email: newEmail };
         try {
-            const response = await fetch('http://localhost:5000/users/1', {
+            const response = await fetch(`http://localhost:5000/users/${userId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
