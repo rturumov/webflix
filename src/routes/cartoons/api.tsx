@@ -4,7 +4,7 @@ export const Route = createFileRoute('/cartoons/api')({
   component: () => <div>Hello /cartoons/api!</div>
 })
 
-type SerialDetail = {
+type CartoonDetail = {
     name: string;
     id: string;
     title: string;
@@ -16,8 +16,8 @@ type SerialDetail = {
     likedByUser: boolean;
 };
 
-export async function getSerials(id: string): Promise<SerialDetail> {
-    const response = await fetch(`http://localhost:5000/serials/${id}`);
+export async function getCartoons(id: string): Promise<CartoonDetail> {
+    const response = await fetch(`http://localhost:5000/cartoons/${id}`);
     console.log("Response status:", response.status);
     if (!response.ok) {
         console.error("Ошибка загрузки данных фильма:", response.statusText);

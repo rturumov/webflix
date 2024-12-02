@@ -1,7 +1,8 @@
 import {createFileRoute, Link} from '@tanstack/react-router'
 import {Box, CardMedia, Stack, Typography} from "@mui/material";
+import {getSerials} from "./api.tsx";
 
-import {getSerials} from "../cartoons/api.tsx";
+
 
 export const Route = createFileRoute('/serials/$serialsId')({
   component: SerialsId,
