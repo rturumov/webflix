@@ -1,13 +1,13 @@
-import {createFileRoute, Link} from '@tanstack/react-router'
-import {useTranslation} from "react-i18next";
-import {useEffect, useMemo, useState} from "react";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
+import { createFileRoute, Link } from '@tanstack/react-router';
+import { useTranslation } from "react-i18next";
+import { useEffect, useMemo, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import {useFavorites} from "../../contexts/movieFavoritesContext.tsx";
 
 export const Route = createFileRoute('/movies/')({
-  component: Index
-})
-
+    component: Index
+});
 
 function Index() {
   const { t } = useTranslation();
@@ -18,6 +18,7 @@ function Index() {
   const [filteredQuery, setFilteredQuery] = useState("");
   const [sortOption, setSortOption] = useState("default");
   const [showSortOptions, setShowSortOptions] = useState(false);
+    const { favorites, toggleFavorite, isFavorite } = useFavorites();
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -39,7 +40,7 @@ function Index() {
   }, []);
 
   const filteredMovies = useMemo(() => {
-    return movies.filter((movie) => 
+    return movies.filter((movie) =>
       movie.title.toLowerCase().includes(filteredQuery.toLowerCase())
     );
   }, [movies, filteredQuery]);
@@ -77,11 +78,13 @@ function Index() {
     return <div>Ошибка: {error.message}</div>;
   }
 
-  return (
-    <div id="top-movies" style={{ padding: "12px 0", paddingTop: "76px" }}>
-      <h2 className="text-center font-bold text-3xl mb-6 text-gray-800">
-        {t("Список фильмов")}
-      </h2>
+    // Обновляем массив movies при клике на лайк
+
+    return (
+        <div id="top-movies" style={{ padding: "12px 0", paddingTop: "76px" }}>
+            <h2 className="text-center font-bold text-3xl mb-6 text-gray-800">
+                {t("Список фильмов")}
+            </h2>
 
       <div className="mb-6 text-center pb-5">
         <div className="flex justify-center items-center gap-2">
@@ -98,7 +101,7 @@ function Index() {
             className="border-2 border-white rounded-md p-3 flex items-center bg-blue-500 text-white hover:bg-blue-600"
             onClick={handleSearch}
           >
-            <FontAwesomeIcon icon={faMagnifyingGlass} /> 
+            <FontAwesomeIcon icon={faMagnifyingGlass} />
           </button>
 
           <button
@@ -127,36 +130,49 @@ function Index() {
         )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {sortedMovies.map((movie) => (
-          <div
-            key={movie.id}
-            className="border rounded-md overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
-          >
-            <img
-              src={movie.posterUrl}
-              alt={movie.title}
-              className="w-full h-72 object-cover transition-transform duration-300 transform hover:scale-105"
-            />
-            <div className="p-4 bg-white">
-              <h3 className="text-lg font-bold text-gray-800">{movie.title}</h3>
-              <p className="text-gray-600 mt-2">{movie.description}</p>
-              <p className="font-bold mt-2 text-blue-600">
-                Рейтинг: {movie.rating}
-              </p>
-              <Link 
-                key={movie.id}
-                to={`/movies/${movie.id}`}
-                className="mt-3 inline-block px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-300"
-              >
-                Подробнее
-              </Link>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {sortedMovies.map((movie) => (
+                    <div
+                        key={movie.id}
+                        className="border rounded-md overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
+                    >
+                        <img
+                            src={movie.posterUrl}
+                            alt={movie.title}
+                            className="w-full h-72 object-cover transition-transform duration-300 transform hover:scale-105"
+                        />
+                        <div className="p-4 bg-white">
+                            <h3 className="text-lg font-bold text-gray-800">{movie.title}</h3>
+                            <p className="text-gray-600 mt-2">{movie.description}</p>
+                            <p className="font-bold mt-2 text-blue-600">
+                                Рейтинг: {movie.rating}
+                            </p>
+                            <div className="flex items-center mt-2">
+                                <button
+                                    className={`text-white px-4 py-2 rounded-md ${
+                                        isFavorite(movie.id)
+                                            ? "bg-blue-700 hover:bg-blue-800"
+                                            : "bg-red-500 hover:bg-red-600"
+                                    }`}
+                                    onClick={() => toggleFavorite(movie)}
+                                >
+                                    {isFavorite(movie.id)
+                                        ? "Удалить из избранного"
+                                        : "Добавить в избранное"}
+                                </button>
+                            </div>
+                            <Link key={movie.id}
+                                  to={`/movies/${movie.id}`}
+                                  className="mt-3 inline-block px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-300"
+                            >
+                                Подробнее
+                            </Link>
+                        </div>
+                    </div>
+                ))}
             </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+        </div>
+    );
 }
 
 export default Index;

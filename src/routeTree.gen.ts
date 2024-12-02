@@ -14,6 +14,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as SerialsIndexImport } from './routes/serials/index'
+import { Route as ProfileIndexImport } from './routes/profile/index'
 import { Route as MoviesIndexImport } from './routes/movies/index'
 import { Route as CartoonsIndexImport } from './routes/cartoons/index'
 import { Route as SerialsSerialsIdImport } from './routes/serials/$serialsId'
@@ -33,6 +34,11 @@ const IndexLazyRoute = IndexLazyImport.update({
 
 const SerialsIndexRoute = SerialsIndexImport.update({
   path: '/serials/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ProfileIndexRoute = ProfileIndexImport.update({
+  path: '/profile/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -107,6 +113,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MoviesIndexImport
       parentRoute: typeof rootRoute
     }
+    '/profile/': {
+      id: '/profile/'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/serials/': {
       id: '/serials/'
       path: '/serials'
@@ -126,6 +139,7 @@ export const routeTree = rootRoute.addChildren({
   SerialsSerialsIdRoute,
   CartoonsIndexRoute,
   MoviesIndexRoute,
+  ProfileIndexRoute,
   SerialsIndexRoute,
 })
 
@@ -143,6 +157,7 @@ export const routeTree = rootRoute.addChildren({
         "/serials/$serialsId",
         "/cartoons/",
         "/movies/",
+        "/profile/",
         "/serials/"
       ]
     },
@@ -163,6 +178,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/movies/": {
       "filePath": "movies/index.tsx"
+    },
+    "/profile/": {
+      "filePath": "profile/index.tsx"
     },
     "/serials/": {
       "filePath": "serials/index.tsx"

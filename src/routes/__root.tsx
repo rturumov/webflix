@@ -66,6 +66,13 @@ function Component() {
           {t("Cartoons")}
         </Link>
 
+        <Link
+            to="/profile"
+            className="text-white font-semibold hover:text-blue-400 transition duration-300 ease-in-out"
+        >
+          Профиль
+        </Link>
+
         <div className="ml-auto flex space-x-2">
           <div className="flex space-x-2">
             <button
