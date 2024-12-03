@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { FavoritesProvider } from '../../contexts/movieFavoritesContext'; 
 
-import Movies from '../../routes/movies/index';
+import Movies from '../src/routes/movies/index';
 
 
 global.fetch = jest.fn();
