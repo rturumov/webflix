@@ -21,7 +21,6 @@ function Profile(){
         if (userId) {
             fetchProfile(userId);
         } else {
-            // Обработка ошибки: пользователь не авторизован
             console.error("Пользователь не авторизован");
         }
     }, [userId, fetchProfile]);

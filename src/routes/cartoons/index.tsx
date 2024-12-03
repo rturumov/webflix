@@ -13,7 +13,7 @@ export const Route = createFileRoute('/cartoons/')({
 function Cartoons() {
   const { t } = useTranslation();
   const [showSortOptions, setShowSortOptions] = useState(false);
-  const { favorites, toggleFavorite, isFavorite } = useFavorites();
+  const {toggleFavorite, isFavorite } = useFavorites();
 
   const {
     cartoons,

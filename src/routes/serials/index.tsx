@@ -1,6 +1,6 @@
 import {createFileRoute, Link} from '@tanstack/react-router'
 import {useTranslation} from "react-i18next";
-import {useCallback, useEffect, useMemo, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 import {useFavorites} from "../../contexts/movieFavoritesContext.tsx";
@@ -15,7 +15,7 @@ function Serials() {
 
     const { t } = useTranslation();
     const [showSortOptions, setShowSortOptions] = useState(false);
-    const { favorites, toggleFavorite, isFavorite } = useFavorites();
+    const { toggleFavorite, isFavorite } = useFavorites();
 
     const {
         series,
@@ -59,10 +59,6 @@ function Serials() {
         },
         [handleSearch],
     );
-
-    const handleShowSortOptions = useCallback(() => {
-        setShowSortOptions((prev) => !prev);
-    }, []);
 
     const handleSetSortOption = useCallback((option: string) => {
         setSortOption(option);

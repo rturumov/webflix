@@ -38,6 +38,8 @@ export function useCartoonDetails(id: string) {
     }
   }, [id]);
 
+  const cartoonTitle = useMemo(() => cartoon?.title ?? '', [cartoon]);
+
   useEffect(() => {
     fetchCartoon();
   }, [fetchCartoon]);
@@ -48,5 +50,5 @@ export function useCartoonDetails(id: string) {
     }
   }, [cartoon]);
 
-  return { cartoon, error, fetchCartoon };
+  return { cartoon, error, fetchCartoon, cartoonTitle};
 }

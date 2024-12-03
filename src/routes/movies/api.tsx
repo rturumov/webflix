@@ -38,6 +38,8 @@ export function useMovieDetails(id: string) {
     }
   }, [id]);
 
+  const movieTitle = useMemo(() => movie?.title ?? '', [movie]);
+
   useEffect(() => {
     fetchMovie();
   }, [fetchMovie]);
@@ -48,5 +50,5 @@ export function useMovieDetails(id: string) {
     }
   }, [movie]);
 
-  return { movie, error, fetchMovie };
+  return { movie, error, fetchMovie, movieTitle };
 }
