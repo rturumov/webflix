@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { FavoritesProvider } from '../../contexts/movieFavoritesContext'; 
+import { FavoritesProvider } from '../src/contexts/movieFavoritesContext';
 import Profile from '../src/routes/profile/index';
 
 
