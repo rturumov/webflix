@@ -1,9 +1,10 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
-import { useTranslation } from "react-i18next";
-import { useEffect, useMemo, useState, useCallback } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import { useFavorites } from "../../contexts/movieFavoritesContext.tsx";
+import {createFileRoute, Link} from '@tanstack/react-router'
+import {useTranslation} from "react-i18next";
+import {useCallback, useEffect, useMemo, useState} from "react";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
+import {useFavorites} from "../../contexts/movieFavoritesContext.tsx";
+import useCartoonsStore from "../../store/cartoonsStore.tsx";
 
 export const Route = createFileRoute('/cartoons/')({
   component: Cartoons
@@ -15,29 +16,12 @@ function Cartoons() {
   const [filteredQuery, setFilteredQuery] = useState("");
   const [sortOption, setSortOption] = useState("default");
   const [showSortOptions, setShowSortOptions] = useState(false);
-  const [setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const { toggleFavorite, isFavorite } = useFavorites();
-  const [cartoons, setCartoons] = useState([]);
+  const { favorites, toggleFavorite, isFavorite } = useFavorites();
+  const { cartoons, isLoading, error, fetchCartoons } = useCartoonsStore();
 
   useEffect(() => {
-    const fetchCartoons = async () => {
-      try {
-        const response = await fetch('http://localhost:5000/cartoons');
-        if (!response.ok) {
-          throw new Error('Ошибка загрузки фильмов');
-        }
-        const data = await response.json();
-        setCartoons(data);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchCartoons();
-  }, []);
+  }, [fetchCartoons]);
 
   const filteredCartoons = useMemo(() => {
     return cartoons.filter((cartoon) =>
@@ -83,6 +67,14 @@ function Cartoons() {
     console.log("Фильтр поиска обновлён:", filteredQuery);
   }, [filteredQuery]);
 
+  if (isLoading) {
+    return <div>Загрузка...</div>;
+  }
+
+  if (error) {
+    return <div>Ошибка: {error.message}</div>;
+  }
+
   return (
     <div id="top-cartoons" style={{ padding: "12px 0", paddingTop: "76px" }}>
       <h2 className="text-center font-bold text-3xl mb-6 text-gray-800">
@@ -107,31 +99,31 @@ function Cartoons() {
             <FontAwesomeIcon icon={faMagnifyingGlass} />
           </button>
 
-          <button
-            className="mt-1 text-black-600 font-bold ml-4"
-            onClick={() => setShowSortOptions(!showSortOptions)}
-          >
-            {t("Сортировать по:")}
-          </button>
-        </div>
-
-        {showSortOptions && (
-          <div className="flex flex-col items-center mt-2 ml-96 pl-24">
             <button
-              className={`mt-1 text-blue-600 ${sortOption === "title" ? "font-bold" : ""}`}
-              onClick={() => setSortOption("title")}
+                className="mt-1 text-black-600 font-bold ml-4"
+                onClick={() => setShowSortOptions(!showSortOptions)}
             >
-              {t("Названию")}
-            </button>
-            <button
-              className={`mt-1 text-blue-600 ${sortOption === "rating" ? "font-bold" : ""}`}
-              onClick={() => setSortOption("rating")}
-            >
-              {t("Рейтингу")}
+              {t("Сортировать по:")}
             </button>
           </div>
-        )}
-      </div>
+
+          {showSortOptions && (
+              <div className="flex flex-col items-center mt-2 ml-96 pl-24">
+                <button
+                    className={`mt-1 text-blue-600 ${sortOption === "title" ? "font-bold" : ""}`}
+                    onClick={() => setSortOption("title")}
+                >
+                  {t("Названию")}
+                </button>
+                <button
+                    className={`mt-1 text-blue-600 ${sortOption === "rating" ? "font-bold" : ""}`}
+                    onClick={() => setSortOption("rating")}
+                >
+                  {t("Рейтингу")}
+                </button>
+              </div>
+          )}
+        </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {sortedCartoons.map((cartoon) => (

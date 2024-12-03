@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import {Avatar} from "@mui/material";
 import {useEffect, useState} from "react";
 import {useFavorites} from "../../contexts/movieFavoritesContext.tsx";
+import useProfileStore from "../../store/profileStore.tsx";
 
 
 export const Route = createFileRoute('/profile/')({
@@ -9,68 +10,39 @@ export const Route = createFileRoute('/profile/')({
 })
 
 function Profile(){
-    const [setError] = useState(null);
-    const [setIsLoading] = useState(true);
-    const [profile, setProfile] = useState([]);
     const [editing, setEditing] = useState(false);
-    const [newName, setNewName] = useState("");
-    const [newEmail, setNewEmail] = useState("");
     const { favorites, toggleFavorite, isFavorite} = useFavorites();
+
+    const { profile, isLoading, error, fetchProfile, updateProfile, newName, newEmail, setNewName, setNewEmail } = useProfileStore();
 
     const userId = localStorage.getItem('userId');
 
     useEffect(() => {
-      const fetchUsers = async () => {
-        try {
-          const response = await fetch(`http://localhost:5000/users/${userId}`);
-          if (!response.ok) {
-            throw new Error('Ошибка загрузки данных');
-          }
-          const data = await response.json();
-          console.log('Загруженные данные:', data);
-          setProfile(data);
-          setNewName(data.name);
-          setNewEmail(data.email);
-        } catch (error) {
-          setError(error);
-        } finally {
-          setIsLoading(false);
+        if (userId) {
+            fetchProfile(userId);
+        } else {
+            // Обработка ошибки: пользователь не авторизован
+            console.error("Пользователь не авторизован");
         }
-      };
-  
-      if (userId) {
-        fetchUsers();
-      } else {
-        setError('Пользователь не авторизован');
-        setIsLoading(false);
-      }
-    }, [userId]);
-
+    }, [userId, fetchProfile]);
     const toggleEditMode = () => setEditing(!editing);
 
     const handleSaveChanges = async () => {
-        const updatedProfile = { ...profile, name: newName, email: newEmail };
         try {
-            const response = await fetch(`http://localhost:5000/users/${userId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(updatedProfile), 
-            });
-
-            if (!response.ok) {
-                throw new Error('Ошибка сохранения данных');
-            }
-
-            const data = await response.json();
-            setProfile(data);
-        } catch (error) {
-            setError(error.message);
+            await updateProfile(userId!, { ...profile, name: newName, email: newEmail });         } catch (error) {
+            console.error("Ошибка сохранения данных:", error);
         } finally {
             setEditing(false);
         }
     };
+
+    if (isLoading) {
+        return <div>Загрузка...</div>;
+    }
+
+    if (error) {
+        return <div>Ошибка: {error.message}</div>;
+    }
 
     return (
         <div style={{ padding: "100px" }}>

@@ -4,40 +4,23 @@ import { useEffect, useMemo, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import {useFavorites} from "../../contexts/movieFavoritesContext.tsx";
-
+import useMovieStore from "../../store/movieStore.tsx";
 export const Route = createFileRoute('/movies/')({
     component: Index
 });
 
 function Index() {
   const { t } = useTranslation();
-  const [movies, setMovies] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredQuery, setFilteredQuery] = useState("");
   const [sortOption, setSortOption] = useState("default");
   const [showSortOptions, setShowSortOptions] = useState(false);
     const { favorites, toggleFavorite, isFavorite } = useFavorites();
+  const { movies, isLoading, error, fetchMovies } = useMovieStore();
 
   useEffect(() => {
-    const fetchMovies = async () => {
-      try {
-        const response = await fetch('http://localhost:5000/movies');
-        if (!response.ok) {
-          throw new Error('Ошибка загрузки фильмов');
-        }
-        const data = await response.json();
-        setMovies(data);
-      } catch (error) {
-        setError(error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchMovies();
-  }, []);
+  }, [fetchMovies]);
 
   const filteredMovies = useMemo(() => {
     return movies.filter((movie) =>
@@ -78,7 +61,6 @@ function Index() {
     return <div>Ошибка: {error.message}</div>;
   }
 
-    // Обновляем массив movies при клике на лайк
 
     return (
         <div id="top-movies" style={{ padding: "12px 0", paddingTop: "76px" }}>
