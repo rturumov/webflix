@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { useTranslation } from "react-i18next";
-import { useEffect, useMemo, useState } from "react";
+import {useCallback, useEffect, useMemo, useState} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import {useFavorites} from "../../contexts/movieFavoritesContext.tsx";
@@ -11,47 +11,48 @@ export const Route = createFileRoute('/movies/')({
 
 function Index() {
   const { t } = useTranslation();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filteredQuery, setFilteredQuery] = useState("");
-  const [sortOption, setSortOption] = useState("default");
   const [showSortOptions, setShowSortOptions] = useState(false);
-    const { favorites, toggleFavorite, isFavorite } = useFavorites();
-  const { movies, isLoading, error, fetchMovies } = useMovieStore();
+  const { favorites, toggleFavorite, isFavorite } = useFavorites();
+
+  const {
+    movies,
+    isLoading,
+    error,
+    fetchMovies,
+    filteredMovies,
+    sortedMovies,
+    searchQuery,
+    setSearchQuery,
+    setSortOption,
+    updateFilteredMovies,
+    updateSortedMovies,
+    sortOption
+  } = useMovieStore();
 
   useEffect(() => {
     fetchMovies();
   }, [fetchMovies]);
 
-  const filteredMovies = useMemo(() => {
-    return movies.filter((movie) =>
-      movie.title.toLowerCase().includes(filteredQuery.toLowerCase())
-    );
-  }, [movies, filteredQuery]);
-
-  const sortedMovies = useMemo(() => {
-    return [...filteredMovies].sort((a, b) => {
-      if (sortOption === "title") {
-        return a.title.localeCompare(b.title);
-      } else if (sortOption === "rating") {
-        return b.rating - a.rating;
-      }
-      return 0;
-    });
-  }, [filteredMovies, sortOption]);
+  useEffect(() => {
+    updateFilteredMovies(movies, searchQuery);
+  }, [movies, searchQuery, updateFilteredMovies]);
 
   useEffect(() => {
-    console.log("Сортировка изменена:", sortOption);
-  }, [sortOption]);
+    updateSortedMovies(filteredMovies, sortOption);
+  }, [filteredMovies, sortOption, updateSortedMovies]);
 
-  const handleSearch = () => {
-    setFilteredQuery(searchQuery);
-  };
+  const handleSearch = useCallback(() => {
+    setSearchQuery(searchQuery);
+  }, [searchQuery, setSearchQuery]);
 
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      handleSearch();
-    }
-  };
+  const handleKeyDown = useCallback(
+      (e) => {
+        if (e.key === "Enter") {
+          handleSearch();
+        }
+      },
+      [handleSearch],
+  );
 
   if (isLoading) {
     return <div>Загрузка...</div>;

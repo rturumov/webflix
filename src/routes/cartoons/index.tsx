@@ -12,37 +12,40 @@ export const Route = createFileRoute('/cartoons/')({
 
 function Cartoons() {
   const { t } = useTranslation();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filteredQuery, setFilteredQuery] = useState("");
-  const [sortOption, setSortOption] = useState("default");
   const [showSortOptions, setShowSortOptions] = useState(false);
   const { favorites, toggleFavorite, isFavorite } = useFavorites();
-  const { cartoons, isLoading, error, fetchCartoons } = useCartoonsStore();
+
+  const {
+    cartoons,
+    isLoading,
+    error,
+    fetchCartoons,
+    filteredCartoons,
+    sortedCartoons,
+    searchQuery,
+    setSearchQuery,
+    setSortOption,
+    sortOption,
+    updateFilteredCartoons,
+    filteredQuery,
+    updateSortedCartoons
+  } = useCartoonsStore();
 
   useEffect(() => {
     fetchCartoons();
   }, [fetchCartoons]);
 
-  const filteredCartoons = useMemo(() => {
-    return cartoons.filter((cartoon) =>
-      cartoon.title.toLowerCase().includes(filteredQuery.toLowerCase())
-    );
-  }, [cartoons, filteredQuery]);
+  useEffect(() => {
+    updateFilteredCartoons(cartoons, searchQuery);
+  }, [cartoons, searchQuery, updateFilteredCartoons]);
 
-  const sortedCartoons = useMemo(() => {
-    return filteredCartoons.sort((a, b) => {
-      if (sortOption === "title") {
-        return a.title.localeCompare(b.title);
-      } else if (sortOption === "rating") {
-        return b.rating - a.rating;
-      }
-      return 0;
-    });
-  }, [filteredCartoons, sortOption]);
+  useEffect(() => {
+    updateSortedCartoons(filteredCartoons, sortOption);
+  }, [filteredCartoons, sortOption, updateSortedCartoons]);
 
   const handleSearch = useCallback(() => {
-    setFilteredQuery(searchQuery);
-  }, [searchQuery]);
+    setSearchQuery(searchQuery);
+  }, [searchQuery, setSearchQuery]);
 
   const handleKeyDown = useCallback(
     (e) => {

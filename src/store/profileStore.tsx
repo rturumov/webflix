@@ -1,4 +1,3 @@
-// src/store/profileStore.js
 import {create} from 'zustand';
 import axios from "axios";
 
