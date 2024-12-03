@@ -9,8 +9,8 @@ export const Route = createFileRoute('/profile/')({
 })
 
 function Profile(){
-    const [error, setError] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
+    const [setError] = useState(null);
+    const [setIsLoading] = useState(true);
     const [profile, setProfile] = useState([]);
     const [editing, setEditing] = useState(false);
     const [newName, setNewName] = useState("");
@@ -22,7 +22,6 @@ function Profile(){
     useEffect(() => {
       const fetchUsers = async () => {
         try {
-          // Используем userId для получения данных текущего пользователя
           const response = await fetch(`http://localhost:5000/users/${userId}`);
           if (!response.ok) {
             throw new Error('Ошибка загрузки данных');
@@ -42,16 +41,13 @@ function Profile(){
       if (userId) {
         fetchUsers();
       } else {
-        // Обработка случая, когда пользователь не авторизован
         setError('Пользователь не авторизован');
         setIsLoading(false);
       }
     }, [userId]);
 
-    // Функция для переключения режима редактирования
     const toggleEditMode = () => setEditing(!editing);
 
-    // Функция для сохранения изменений
     const handleSaveChanges = async () => {
         const updatedProfile = { ...profile, name: newName, email: newEmail };
         try {
@@ -60,14 +56,13 @@ function Profile(){
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(updatedProfile), // Отправляем обновленные данные
+                body: JSON.stringify(updatedProfile), 
             });
 
             if (!response.ok) {
                 throw new Error('Ошибка сохранения данных');
             }
 
-            // Если сохранение прошло успешно, обновляем локальное состояние
             const data = await response.json();
             setProfile(data);
         } catch (error) {
@@ -76,9 +71,6 @@ function Profile(){
             setEditing(false);
         }
     };
-
-    const movies = favorites.filter((item) => item.type === 'movie');
-    const series = favorites.filter((item) => item.type === 'serial');
 
     return (
         <div style={{ padding: "100px" }}>

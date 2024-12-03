@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 
 const Auth = ({ onLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleLogin = async () => {
+  const apiUrl = useMemo(() => 'http://localhost:5000/users', []);
+
+  const handleLogin = useCallback(async () => {
     try {
-      const response = await fetch('http://localhost:5000/users');
+      const response = await fetch(apiUrl);
       const users = await response.json();
 
       const user = users.find(
@@ -15,27 +17,31 @@ const Auth = ({ onLogin }) => {
       );
 
       if (user) {
-        onLogin(user); 
+        onLogin(user);
         setError("");
-          localStorage.setItem('userId', user.id);
-
+        localStorage.setItem('userId', user.id);
       } else {
         setError("Неверное имя пользователя или пароль");
       }
     } catch (error) {
       setError("Произошла ошибка при подключении к серверу");
     }
-  };
+  }, [apiUrl, username, password, onLogin]);
+
+  const handleKeyDown = useCallback(
+    (e) => {
+      if (e.key === "Enter") {
+        handleLogin();
+      }
+    },
+    [handleLogin]
+  );
 
   useEffect(() => {
-    console.log("Успешная авторизация.", handleLogin);
-  }, [handleLogin]);
-
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      handleLogin();
+    if (error) {
+      console.error("Ошибка авторизации:", error);
     }
-  };
+  }, [error]);
 
   return (
     <div className="flex flex-col">

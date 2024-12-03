@@ -1,7 +1,6 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState, useCallback, useMemo } from "react";
 import axios from "axios";
 
-// Тип для элемента избранного
 export interface FavoriteItem {
     id: number;
     title: string;
@@ -11,68 +10,61 @@ export interface FavoriteItem {
     likes: number;
 }
 
-// Тип контекста
 interface FavoritesContextType {
     favorites: FavoriteItem[];
     toggleFavorite: (movie: FavoriteItem) => void;
     isFavorite: (id: number) => boolean;
 }
 
-// Создаем контекст
 const FavoritesContext = createContext<FavoritesContextType | undefined>(undefined);
 
-// Провайдер
 export const FavoritesProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [favorites, setFavorites] = useState<FavoriteItem[]>([]);
 
-    // Загружаем избранные фильмы с бэкенда
-    useEffect(() => {
-        const fetchFavorites = async () => {
-            try {
-                const response = await axios.get("http://localhost:5000/favorites"); // Замените на ваш URL
-                setFavorites(response.data);
-            } catch (error) {
-                console.error("Ошибка при загрузке избранного:", error);
-            }
-        };
+    const postUrl = useMemo(() => "http://localhost:5000/favorites", []);
+    const deleteUrl = useCallback((id: number) => `http://localhost:5000/favorites/${id}`, []);
 
-        fetchFavorites();
-    }, []);
-
-    // Функция для добавления/удаления фильма из избранного
-    const toggleFavorite = async (movie: FavoriteItem) => {
+    const toggleFavorite = useCallback(async (movie: FavoriteItem) => {
         try {
             const isAlreadyFavorite = favorites.some((fav) => fav.id === movie.id);
 
             if (isAlreadyFavorite) {
-                // Удаляем фильм из избранного
                 console.log("Удаляем фильм с ID:", movie.id);
-                console.log(`URL запроса: http://localhost:5000/favorites/${movie.id}`);
-                await axios.delete(`http://localhost:5000/favorites/${movie.id}`);
+                console.log(`URL запроса: ${deleteUrl(movie.id)}`);
+                await axios.delete(deleteUrl(movie.id));
                 setFavorites((prevFavorites) => prevFavorites.filter((fav) => fav.id !== movie.id));
             } else {
-                // Добавляем фильм в избранное
-                await axios.post("http://localhost:5000/favorites", movie);
+                console.log("Добавляем фильм с ID:", movie.id);
+                console.log(`URL запроса: ${postUrl}`);
+                await axios.post(postUrl, movie);
                 setFavorites((prevFavorites) => [...prevFavorites, movie]);
             }
         } catch (error) {
             console.error("Ошибка при обновлении избранного:", error);
         }
-    };
+    }, [favorites, deleteUrl, postUrl]);
 
-    // Проверяем, находится ли фильм в избранном
-    const isFavorite = (id: number) => {
+    const isFavorite = useCallback((id: number) => {
         return favorites.some((fav) => fav.id === id);
-    };
+    }, [favorites]);
+
+    useEffect(() => {
+        console.log("Список избранного обновлен:", favorites);
+    }, [favorites]);
+
+    const contextValue = useMemo(() => ({
+        favorites,
+        toggleFavorite,
+        isFavorite
+    }), [favorites, toggleFavorite, isFavorite]);
 
     return (
-        <FavoritesContext.Provider value={{ favorites, toggleFavorite, isFavorite }}>
+        <FavoritesContext.Provider value={contextValue}>
             {children}
         </FavoritesContext.Provider>
     );
 };
 
-// Хук для использования контекста
 export const useFavorites = () => {
     const context = useContext(FavoritesContext);
     if (!context) {
