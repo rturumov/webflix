@@ -58,7 +58,7 @@ self.addEventListener('sync', (event) => {
 });
 
 async function syncFavorites() {
-    const outbox = await getOutbox(); // Implement your IndexedDB or storage
+    const outbox = await getOutbox(); 
     for (const request of outbox) {
         try {
             await fetch(request.url, {
