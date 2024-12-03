@@ -4,6 +4,7 @@ import {useEffect, useMemo, useState} from "react";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 import {useFavorites} from "../../contexts/movieFavoritesContext.tsx";
+import useSerialsStore from "../../store/serialsStore.tsx";
 
 export const Route = createFileRoute('/serials/')({
   component: Serials
@@ -18,29 +19,12 @@ function Serials() {
     const [selectedSeries, setSelectedSeries] = useState(null);
     const [sortOption, setSortOption] = useState("default");
     const [showSortOptions, setShowSortOptions] = useState(false);
-    const [series, setSerials] = useState([])
     const { favorites, toggleFavorite, isFavorite } = useFavorites();
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const { series, isLoading, error, fetchSerials } = useSerialsStore();
 
     useEffect(() => {
-        const fetchSerials = async () => {
-            try {
-                const response = await fetch('http://localhost:5000/serials');
-                if (!response.ok) {
-                    throw new Error('Ошибка загрузки фильмов');
-                }
-                const data = await response.json();
-                setSerials(data);
-            } catch (error) {
-                setError(error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
         fetchSerials();
-    }, []);
+    }, [fetchSerials]);
 
     const filteredSeries = useMemo(() => {
         return series.filter((s) =>
@@ -73,38 +57,13 @@ function Serials() {
         }
     };
 
-    const openModal = (series) => {
-        setSelectedSeries(series);
-    };
+    if (isLoading) {
+        return <div>Загрузка...</div>;
+    }
 
-    const closeModal = () => {
-        setSelectedSeries(null);
-    };
-    const handleLikeClick = (serialId) => {
-        setSerials((prevSerials) => {
-            return prevSerials.map((serial) => {
-                if (serial.id === serialId) {
-                    const updatedSerial = {
-                        ...serial,
-                        likes: serial.likedByUser ? serial.likes - 1 : serial.likes + 1,
-                        likedByUser: !serial.likedByUser,
-                    };
-
-                    // Добавляем или удаляем из контекста избранное
-                    if (updatedSerial.likedByUser) {
-                        setFavorites((prevFavorites) => [...prevFavorites, updatedSerial]);
-                    } else {
-                        setFavorites((prevFavorites) =>
-                            prevFavorites.filter((fav) => fav.id !== serialId)
-                        );
-                    }
-
-                    return updatedSerial;
-                }
-                return serial;
-            });
-        });
-    };
+    if (error) {
+        return <div>Ошибка: {error.message}</div>;
+    }
     return (
         <div id="series-list" style={{ padding: "12px 0", paddingTop: "76px" }}>
             <h2 className="text-center font-bold text-3xl mb-6 text-gray-800">
