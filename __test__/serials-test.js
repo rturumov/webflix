@@ -1,6 +1,6 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { FavoritesProvider } from '../../contexts/movieFavoritesContext'; 
-import Serials from '../../routes/serials/index';
+import Serials from '../src/routes/serials/index';
 
 
 
