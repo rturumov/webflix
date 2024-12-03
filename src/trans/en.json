@@ -1,7 +1,6 @@
 {
   "Home": "Home",
   "About": "About",
-  "Welcome": "Welcome",
   "About us": "About us",
   "Movies": "Movies",
   "Serials": "Serials",
@@ -18,5 +17,8 @@
   "enter_username": "Enter Username",
   "enter_password": "Enter Password",
   "error": "Invalid credentials. Please try again.",
-  "learn_more": "Learn more about the site"
+  "learn_more": "Learn more about the site",
+  "Logout": "Logout",
+  "Welcome": "Welcome",
+  "Profile": "Profile"
 }

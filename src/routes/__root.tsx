@@ -69,7 +69,7 @@ function Component() {
             to="/profile"
             className="text-white font-semibold hover:text-blue-400 transition duration-300 ease-in-out"
         >
-          Профиль
+          {t("Profile")}
         </Link>
 
         <div className="ml-auto flex space-x-2">
@@ -92,13 +92,13 @@ function Component() {
           {user ? (
             <>
               <h1 className="text-1xl font-bold">
-                Добро пожаловать, {user.name}!
+                {t("Welcome")}, {user.name}!
               </h1>
               <button
                 onClick={handleLogout}
                 className="ml-5 bg-red-500 text-white py-2 px-4 rounded"
               >
-                Выйти
+                {t("Logout")}
               </button>
             </>
           ) : null}
