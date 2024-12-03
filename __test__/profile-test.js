@@ -1,6 +1,6 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { FavoritesProvider } from '../../contexts/movieFavoritesContext'; 
-import Profile from '../../routes/profile/index';
+import Profile from '../src/routes/profile/index';
 
 
 global.fetch = jest.fn();
