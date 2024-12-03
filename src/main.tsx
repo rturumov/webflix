@@ -17,6 +17,16 @@ declare module "@tanstack/react-router" {
   }
 }
 
+// if ('serviceWorker' in navigator) {
+//   navigator.serviceWorker.register('./public/sw.js')
+//       .then((registration) => {
+//           console.log('Service Worker registered successfully:', registration);
+//       })
+//       .catch((error) => {
+//           console.error('Service Worker registration failed:', error);
+//       });
+// }
+
 const rootElement = document.getElementById("root")!;
 if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
