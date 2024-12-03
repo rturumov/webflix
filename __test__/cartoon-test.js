@@ -1,6 +1,6 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { FavoritesProvider } from '../../contexts/movieFavoritesContext'; 
-import Cartoons from '../../routes/cartoons/index';
+import Cartoons from '..src/routes/cartoons/index';
 
 
 //cartoons 
