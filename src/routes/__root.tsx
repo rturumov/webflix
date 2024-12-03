@@ -11,7 +11,6 @@ export const Route = createRootRoute({
 
 function Component() {
   const { t } = useTranslation();
-  console.log(i18n.language);
   const [user, setUser] = useState(() => {
     const storedUser = localStorage.getItem("user");
     return storedUser ? JSON.parse(storedUser) : null;

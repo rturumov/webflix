@@ -31,9 +31,11 @@ function Cartoons() {
     updateSortedCartoons
   } = useCartoonsStore();
 
+  const memoizedFetchCartoons = useCallback(fetchCartoons, [fetchCartoons]);
+
   useEffect(() => {
-    fetchCartoons();
-  }, [fetchCartoons]);
+    memoizedFetchCartoons();
+  }, [memoizedFetchCartoons]);
 
   useEffect(() => {
     updateFilteredCartoons(cartoons, searchQuery);
@@ -55,6 +57,15 @@ function Cartoons() {
     },
     [handleSearch]
   );
+
+  const handleShowSortOptions = useCallback(() => {
+    setShowSortOptions((prev) => !prev);
+  }, []);
+
+  const handleSetSortOption = useCallback((option: string) => {
+    setSortOption(option);
+  }, [setSortOption]);
+
 
   useEffect(() => {
     console.log("Сортировка изменена:", sortOption);
@@ -104,7 +115,7 @@ function Cartoons() {
 
             <button
                 className="mt-1 text-black-600 font-bold ml-4"
-                onClick={() => setShowSortOptions(!showSortOptions)}
+                onClick={handleShowSortOptions}
             >
               {t("Сортировать по:")}
             </button>
@@ -114,13 +125,13 @@ function Cartoons() {
               <div className="flex flex-col items-center mt-2 ml-96 pl-24">
                 <button
                     className={`mt-1 text-blue-600 ${sortOption === "title" ? "font-bold" : ""}`}
-                    onClick={() => setSortOption("title")}
+                    onClick={() => handleSetSortOption("title")}
                 >
                   {t("Названию")}
                 </button>
                 <button
                     className={`mt-1 text-blue-600 ${sortOption === "rating" ? "font-bold" : ""}`}
-                    onClick={() => setSortOption("rating")}
+                    onClick={() => handleSetSortOption("rating")}
                 >
                   {t("Рейтингу")}
                 </button>

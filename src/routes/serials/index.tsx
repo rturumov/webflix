@@ -32,9 +32,12 @@ function Serials() {
         updateSortedSeries,
     } = useSerialsStore();
 
+    const memoizedFetchSerials = useCallback(fetchSerials, [fetchSerials]);
+
     useEffect(() => {
-        fetchSerials();
-    }, [fetchSerials]);
+        memoizedFetchSerials();
+    }, [memoizedFetchSerials]);
+
 
     useEffect(() => {
         updateFilteredSeries(series, searchQuery);
@@ -56,6 +59,15 @@ function Serials() {
         },
         [handleSearch],
     );
+
+    const handleShowSortOptions = useCallback(() => {
+        setShowSortOptions((prev) => !prev);
+    }, []);
+
+    const handleSetSortOption = useCallback((option: string) => {
+        setSortOption(option);
+    }, [setSortOption]);
+
 
     if (isLoading) {
         return <div>Загрузка...</div>;
@@ -100,13 +112,13 @@ function Serials() {
                     <div className="flex flex-col items-center mt-2 ml-96 pl-24">
                         <button
                             className={`mt-1 text-blue-600 ${sortOption === "title" ? "font-bold" : ""}`}
-                            onClick={() => setSortOption("title")}
+                            onClick={() => handleSetSortOption("title")}
                         >
                             {t("Названию")}
                         </button>
                         <button
                             className={`mt-1 text-blue-600 ${sortOption === "rating" ? "font-bold" : ""}`}
-                            onClick={() => setSortOption("rating")}
+                            onClick={() => handleSetSortOption("rating")}
                         >
                             {t("Рейтингу")}
                         </button>

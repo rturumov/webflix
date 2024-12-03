@@ -29,9 +29,11 @@ function Index() {
     sortOption
   } = useMovieStore();
 
+  const memoizedFetchMovies = useCallback(fetchMovies, [fetchMovies]);
+
   useEffect(() => {
-    fetchMovies();
-  }, [fetchMovies]);
+    memoizedFetchMovies();
+  }, [memoizedFetchMovies]);
 
   useEffect(() => {
     updateFilteredMovies(movies, searchQuery);
@@ -53,6 +55,14 @@ function Index() {
       },
       [handleSearch],
   );
+
+  const handleShowSortOptions = useCallback(() => {
+    setShowSortOptions((prev) => !prev);
+  }, []);
+
+  const handleSetSortOption = useCallback((option: string) => {
+    setSortOption(option);
+  }, [setSortOption]);
 
   if (isLoading) {
     return <div>Загрузка...</div>;
@@ -89,7 +99,7 @@ function Index() {
 
           <button
             className="mt-1 text-black-600 font-bold ml-4"
-            onClick={() => setShowSortOptions(!showSortOptions)}
+            onClick={handleShowSortOptions}
           >
             {t("Сортировать по:")}
           </button>
@@ -99,13 +109,13 @@ function Index() {
           <div className="flex flex-col items-center mt-2 ml-96 pl-24">
             <button
               className={`mt-1 text-blue-600 ${sortOption === "title" ? "font-bold" : ""}`}
-              onClick={() => setSortOption("title")}
+              onClick={() => handleSetSortOption("title")}
             >
               {t("Названию")}
             </button>
             <button
               className={`mt-1 text-blue-600 ${sortOption === "rating" ? "font-bold" : ""}`}
-              onClick={() => setSortOption("rating")}
+              onClick={() => handleSetSortOption("rating")}
             >
               {t("Рейтингу")}
             </button>

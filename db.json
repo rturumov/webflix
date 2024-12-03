@@ -418,5 +418,22 @@
       "type": "cartoon"
     }
   ],
-  "favorites": []
+  "favorites": [
+    {
+      "id": "29",
+      "title": "Смешарики",
+      "description": "Приключения забавных круглых персонажей в мире, полном смеха.",
+      "rating": "7.5",
+      "posterUrl": "https://www.karusel-tv.ru/skin/smeshariki-novie-priklucheniya/images/scene/placeholder.png?022a99928c",
+      "type": "cartoon"
+    },
+    {
+      "id": "29",
+      "title": "Смешарики",
+      "description": "Приключения забавных круглых персонажей в мире, полном смеха.",
+      "rating": "7.5",
+      "posterUrl": "https://www.karusel-tv.ru/skin/smeshariki-novie-priklucheniya/images/scene/placeholder.png?022a99928c",
+      "type": "cartoon"
+    }
+  ]
 }
