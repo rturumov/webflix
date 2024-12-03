@@ -39,6 +39,18 @@ export const FavoritesProvider: React.FC<{ children: React.ReactNode }> = ({ chi
                 await axios.post(postUrl, movie);
                 setFavorites((prevFavorites) => [...prevFavorites, movie]);
             }
+             // push notification
+             // if ('Notification' in window && 'serviceWorker' in navigator) {
+              //     const permission = await Notification.requestPermission();
+              //     if (permission === 'granted') {
+              //         const registration = await navigator.serviceWorker.ready;
+              //         registration.showNotification('Added to Favorites', {
+              //             body: `You added "${movie.title}" to your favorites.`,
+              //             icon: '/icon.png', // Path to your notification icon
+              //             tag: `add-to-favorite-${movie.id}`, // Unique tag to prevent duplicate notifications
+              //         });
+              //     }
+              // }
         } catch (error) {
             console.error("Ошибка при обновлении избранного:", error);
         }
