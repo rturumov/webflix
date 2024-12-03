@@ -20,6 +20,8 @@ const Auth = ({ onLogin }) => {
         onLogin(user);
         setError("");
         localStorage.setItem('userId', user.id);
+          window.location.reload();
+
       } else {
         setError("Неверное имя пользователя или пароль");
       }
